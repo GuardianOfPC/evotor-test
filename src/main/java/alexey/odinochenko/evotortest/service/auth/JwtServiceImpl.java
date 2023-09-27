@@ -1,4 +1,4 @@
-package alexey.odinochenko.evotortest.config;
+package alexey.odinochenko.evotortest.service.auth;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.Claims;
@@ -15,23 +15,23 @@ import java.util.Map;
 import java.util.function.Function;
 
 @Service
-public class JwtService {
+public class JwtServiceImpl implements JwtService {
 
-    private static final String SECRET_KEY = "783942676b4e723334737954356439334d48784e6e70424f4758306533496276";
-    public String extractUsername(String token) {
+    private static final String SECRET_KEY = System.getenv("JWT_SECRET");
+    @Override public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
     }
 
-    public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
+    @Override public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
         final Claims claims = extractAllClaims(token);
         return claimsResolver.apply(claims);
     }
 
-    public String generateToken(UserDetails userDetails) {
+    @Override public String generateToken(UserDetails userDetails) {
         return generateToken(new HashMap<>(), userDetails);
     }
 
-    public String generateToken(
+    @Override public String generateToken(
             Map<String, Object> extraClaims,
             UserDetails userDetails
     ) {
@@ -45,20 +45,20 @@ public class JwtService {
                 .compact();
     }
 
-    public boolean isTokenValid(String token, UserDetails userDetails) {
+    @Override public boolean isTokenValid(String token, UserDetails userDetails) {
         final String username = extractUsername(token);
         return (username.equals(userDetails.getUsername())) && !isTokenExpired(token);
     }
 
-    private boolean isTokenExpired(String token) {
+    @Override public boolean isTokenExpired(String token)  {
         return extractExpiration(token).before(new Date());
     }
 
-    private Date extractExpiration(String token) {
+    @Override public Date extractExpiration(String token)  {
         return extractClaim(token, Claims::getExpiration);
     }
 
-    private Claims extractAllClaims(String token) {
+    @Override public Claims extractAllClaims(String token) {
         return Jwts
                 .parserBuilder()
                 .setSigningKey(getSignKey())
@@ -67,8 +67,8 @@ public class JwtService {
                 .getBody();
     }
 
-    private Key getSignKey() {
-        byte[] keyBytes = Decoders.BASE64.decode(SECRET_KEY);
+    @Override public Key getSignKey() {
+        byte[] keyBytes = Decoders.BASE64.decode(JwtServiceImpl.SECRET_KEY);
         return Keys.hmacShaKeyFor(keyBytes);
     }
 }

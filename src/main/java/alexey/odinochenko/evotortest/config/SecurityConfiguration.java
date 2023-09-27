@@ -1,6 +1,7 @@
 package alexey.odinochenko.evotortest.config;
 
 import alexey.odinochenko.evotortest.data.entity.Role;
+import alexey.odinochenko.evotortest.service.auth.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

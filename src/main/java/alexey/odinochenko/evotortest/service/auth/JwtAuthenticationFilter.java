@@ -1,4 +1,4 @@
-package alexey.odinochenko.evotortest.config;
+package alexey.odinochenko.evotortest.service.auth;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

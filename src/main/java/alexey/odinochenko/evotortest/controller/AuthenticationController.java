@@ -1,8 +1,8 @@
 package alexey.odinochenko.evotortest.controller;
 
+import alexey.odinochenko.evotortest.data.request.AuthenticationRequest;
 import alexey.odinochenko.evotortest.data.request.RegisterRequest;
 import alexey.odinochenko.evotortest.data.response.AuthenticationResponse;
-import alexey.odinochenko.evotortest.data.request.AuthenticationRequest;
 import alexey.odinochenko.evotortest.service.auth.AuthenticationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -16,19 +16,19 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class AuthenticationController {
 
-    private final AuthenticationService authenticationService;
+    private final AuthenticationService authenticationServiceImpl;
 
     @PostMapping("/register")
     public ResponseEntity<AuthenticationResponse> register(
             @RequestBody RegisterRequest request
     ) {
-        return ResponseEntity.ok(authenticationService.register(request));
+        return ResponseEntity.ok(authenticationServiceImpl.register(request));
     }
 
     @PostMapping("/authenticate")
     public ResponseEntity<AuthenticationResponse> authenticate(
             @RequestBody AuthenticationRequest request
     ) {
-        return ResponseEntity.ok(authenticationService.authenticate(request));
+        return ResponseEntity.ok(authenticationServiceImpl.authenticate(request));
     }
 }
